@@ -108,65 +108,60 @@ class Form extends React.Component {
 export createForm()(Form);
 ```
 
-## createForm(formOption): Function
+## `createForm(formOption: Object): Function`
 
-### formOption.validateMessages: Object
+- **Parameters**
+	- `formOption` (Optional)
 
-preset messages of [async-validator](https://github.com/yiminghe/async-validator)
+		Option Key | Signature | Description
+		-|-|-
+		`validateMessages `| `Object` | Preset messages of [async-validator](https://github.com/yiminghe/async-validator)
+		`mapProps` | `Function(props): Object` | Get new props transfered to WrappedComponent. Defaults to props=>props.
+		`onFieldsChange` | `Function(props, changedFields)` | Called when field changed, you can dispatch fields to redux store.
+		`onValuesChange` | `Function(props, changedValues)` | Called when value changed.
+		`mapPropsToFields` | `Function(props)` | convert value from props to fields. used for read fields from redux store.
+		`withRef` | `Boolean` | Maintain an ref for wrapped component instance, use `refs.wrappedComponent` to access.
 
-### formOption.mapProps: Function(props): Object
 
-Get new props transfered to WrappedComponent. Defaults to props=>props.
+__CreateForm() will return another function which will pass an object as prop `form` with the following members to `WrappedComponent`:__
 
-### formOption.onFieldsChange(props, changedFields)
+### `getFieldProps(name: String, option: Object): Object`
+Will create props which can be set on any Component which supports both the `value` and `onChange` interface. Once set, this will create a binding between the form logic and the recipient input.
 
-Called when field changed, you can dispatch fields to redux store.
+- **Parameters**
+	- `name: String` (Required): The unique name for the input
+	- `option: Object` (Optional):
+	
+		Option Key | Signature | Description
+		-|-|-
+		`exclusive` | `Boolean` | Whether to set the value exclusively. Commonly used with mutually exclusive inputs such as `<input type="radio" />`.
+		`valuePropName` | `String` | Prop name of component's value field, eg: checkbox should be set to `checked`.
+		`getValueFromEvent` | `Function` | Specify how to get value from the arguments to `onChange`. Commonly an event object.
+		`getValueProps` | `Function` | Specify how to get the component props according to the field value.
+		`initialValue` | `mixed` | The initial value for the `value` prop of the current component.
+		`normalize` | `Function(value, prevValue, allValues)` | Return normalized value.
+		`trigger` | `String` | Defaults to `onChange`. This is the name of the prop which is listened to collect form data.
+		`validateTrigger` | `String | String[]` | Event which is listened to validate. Defaults to `onChange`. Set to `false` to only validate when calling prop `validateFields.`
+		`validate` | `Object[]` | An array containing validation rule objects. (See below)
+		`validateFirst` | `Boolean` | Defaults to `false`. Whether to stop validate on the first error for this field.
+		`fieldNameProp` | | Where to store the `name` argument of `getFieldProps`
+		`fieldMetaProp` | | Where to store the meta data of `getFieldProps`
 
-### formOption.onValuesChange(props, changedValues)
-
-Called when value changed.
-
-### formOption.mapPropsToFields(props)
-
-convert value from props to fields. used for read fields from redux store.
-
-### formOption.withRef: boolean
-
-Maintain an ref for wrapped component instance, use `refs.wrappedComponent` to access.
-
-createForm() will return another function:
-
-### function(WrappedComponent: React.Component): React.Component
-
-Will pass a object as prop form with the following members to WrappedComponent:
-
-### getFieldProps(name, option): Object
-
-Will create props which can be set on a input/InputComponent which support value and onChange interface.
-
-After set, this will create a binding with this input.
-
+- **Validation Rule Objects**
+	
+	Option Key | Signature | Description
+	-|-|-
+	`trigger` | `String | String[]` | Event which is listened to validate on a per rule basis, see `validateTrigger` above
+	`rules` | `Object[]` | Validator rules. see: [async-validator](https://github.com/yiminghe/async-validator)
+	
+- **Examples**
 ```jsx
 <form>
   <input {...getFieldProps('name', { ...options })} />
 </form>
 ```
 
-#### name: String
-
-This input's unique name.
-
-#### option.exclusive: boolean
-
-whether set value exclusively. used with radio.
-
-#### option.valuePropName: String
-
-Prop name of component's value field, eg: checkbox should be set to `checked` ...
-
-#### option.getValueFromEvent
-
-Specify how to get value from event. Defaults to
+`getValueFromEvent` Defaults to:
 
 ```js
 function (e) {
@@ -178,41 +173,14 @@ function (e) {
 }
 ```
 
-#### option.getValueProps
-
-get the component props according to field value. Defaults to
-
+`getValueProps` Defaults to:
 ```js
 function (value) {
   return { value };
 }
 ```
 
-#### option.initialValue
-
-Initial value of current component.
-
-#### option.normalize(value, prevValue, allValues)
-
-Return normalized value 
-
-#### option.trigger: String
-
-Defaults to `onChange`. Event which is listened to collect form data.
-
-#### option.validate: Object[]
-
-##### option.validate[n].trigger: String|String[]
-
-Event which is listened to validate. 
-Defaults to `onChange`, set to falsy to only validate when call props.validateFields.
-
-##### option.validate[n].rules: Object[]
-
-Validator rules. see: [async-validator](https://github.com/yiminghe/async-validator)
-
-#### option.validateTrigger && option.rules
-
+`validateTrigger` and `rules`:
 ```js
 {
   validateTrigger: 'onBlur',
@@ -227,21 +195,14 @@ Validator rules. see: [async-validator](https://github.com/yiminghe/async-valida
 }
 ```
 
-#### option.validateFirst: Boolean
 
-Defaults to false. whether stop validate on first rule of error for this field.
+### `getFieldDecorator(name:String, option: Object): (React.Node): React.Node`
+Similar to `getFieldProps`, but add some helper warnings and you can write the `trigger` (`onChange` / `onFoo`) prop directly inside React.Node props:
 
-#### option.fieldNameProp
-
-Where to store the `name` argument of `getFieldProps`.
-
-#### option.fieldMetaProp
-
-Where to store the meta data of `getFieldProps`.
-
-### getFieldDecorator(name:String, option: Object): (React.Node): React.Node
-
-Similar to `getFieldProps`, but add some helper warnings and you can write onXX directly inside React.Node props:
+- **Parameters**
+	See `getFieldProps`
+	
+- **Example**
 
 ```jsx
 <form>
@@ -249,27 +210,30 @@ Similar to `getFieldProps`, but add some helper warnings and you can write onXX 
 </form>
 ```
 
-### getFieldsValue([fieldNames: String[]])
-
-Get fields value by fieldNames.
-
-### getFieldValue(fieldName: String)
-
+### `getFieldValue(fieldName: String)`
 Get field value by fieldName.
 
-### getFieldInstance(fieldName: String)
+- **Parameters**
+	- `fieldName: String`: The field name to return the value of
 
-Get field react public instance by fieldName.
+### `getFieldsValue(fieldNames: String[])`
+Get fields value by fieldNames. See `getFieldValue`
 
-### setFieldsValue(obj: Object)
+- **Parameters**
+	- `fieldNames: String[]`: The field names to return the values of
 
-Set fields value by kv object.
+### `getFieldInstance(fieldName: String)`
 
-### setFieldsInitialValue(obj: Object)
+- **Parameters**
+	- `fieldName: String`: The field name to return the instance of
 
-Set fields initialValue by kv object. use for reset and initial display/value.
+### `setFieldsValue(obj: Object)`
+Set fields value by a key:value object, where the object keys match the fieldName.
 
-### setFields(obj: Object)
+### `setFieldsInitialValue(obj: Object)`
+Set fields initivalValue by a key:value object, where the object keys match the fieldName. Use for reset and initial display/value.
+
+### `setFields(obj: Object)`
 
 Set fields by kv object. each field can contain errors and value member.
 
