@@ -150,7 +150,7 @@ Will create props which can be set on any Component which supports both the `val
 - **Validation Rule Objects**
 	
 	Option Key | Signature | Description
-	-|-|-
+	---|---|---
 	`trigger` | `String | String[]` | Event which is listened to validate on a per rule basis, see `validateTrigger` above
 	`rules` | `Object[]` | Validator rules. see: [async-validator](https://github.com/yiminghe/async-validator)
 	
