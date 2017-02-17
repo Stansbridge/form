@@ -228,72 +228,82 @@ Get fields value by fieldNames. See `getFieldValue`
 	- `fieldName: String`: The field name to return the instance of
 
 ### `setFieldsValue(obj: Object)`
-Set fields value by a key:value object, where the object keys match the fieldName.
+Set fields value by a key:value object
+
+- **Parameters**
+	- `obj: Object`:  key:value where the object keys match the fieldName
 
 ### `setFieldsInitialValue(obj: Object)`
-Set fields initivalValue by a key:value object, where the object keys match the fieldName. Use for reset and initial display/value.
+Set fields initivalValue by a key:value object,
+
+- **Parameters**
+	- `obj: Object`:  key:value where the object keys match the fieldName. Used for reset and the initial display value.
 
 ### `setFields(obj: Object)`
+Set fields by key:value object
 
-Set fields by kv object. each field can contain errors and value member.
+- **Parameters**
+	- `obj: Object`:  key:value where the object keys match the fieldName. Each field can contain `errors` and `value` object member.
 
-### validateFields([fieldNames: String[]], [options: Object], callback: Function(errors, values))
-
+### `validateFields([fieldNames: String[]], [options: Object], callback: Function(errors, values))`
 Validate and get fields value by fieldNames.
 
-options is the same as validate method of [async-validator](https://github.com/yiminghe/async-validator).
+
+
 And add `force` and `scroll`. `scroll` is the same as [dom-scroll-into-view's function parameter `config`](https://github.com/yiminghe/dom-scroll-into-view#function-parameter).
 
-#### options.force: Boolean
+- **Parameters**
+	- `fieldNames: String[]`: An array of field names
+	- `options: Object`: Available values are the same as the `validate` method of [async-validator](https://github.com/yiminghe/async-validator). `force` Defaults to false and determines whether to validate fields which have already been validated via `validateTrigger`.
+	- `callback: Function(errors, values)`: Callback when async validatioin is complete
 
-Defaults to false. Whether to validate fields which have been validated(caused by validateTrigger).
 
-### getFieldsError(names): Object{ [name]: String[] }
+### `getFieldsError(names): Object{ [name]: String[] }`
 
 Get inputs' validate errors.
 
-### getFieldError(name): String[]
+### `getFieldError(name): String[]`
 
 Get input's validate errors.
 
-### isFieldValidating(name: String): Bool
+### `isFieldValidating(name: String): Bool`
 
 Whether this input is validating.
 
-### isFieldsValidating(names: String[]): Bool
+### `isFieldsValidating(names: String[]): Bool`
 
 Whether one of the inputs is validating.
 
-### isFieldTouched(name: String): Bool
+### `isFieldTouched(name: String): Bool`
 
 Whether this input's value had been change.
 
-### isFieldsTouched(names: String[]): Bool
+### `isFieldsTouched(names: String[]): Bool`
 
 Whether one of the inputs' values had been change.
 
-### isSubmitting(): Bool
+### `isSubmitting(): Bool`
 
 Whether the form is submitting.
 
-### submit(callback: Function)
+### `submit(callback: Function)`
 
 Cause isSubmitting to return true, after callback called, isSubmitting return false.
 
-### resetFields([names: String[]])
+### `resetFields([names: String[]])`
 
 Reset specified inputs. Defaults to all.
 
 
-## rc-form/lib/createDOMForm(formOption): Function
+## `rc-form/lib/createDOMForm(formOption): Function`
 
 createForm enhancement, support props.form.validateFieldsAndScroll
 
-### props.form.validateFieldsAndScroll([fieldNames: String[]], [options: Object], callback: Function(errors, values))
+### `props.form.validateFieldsAndScroll([fieldNames: String[]], [options: Object], callback: Function(errors, values))`
 
 props.form.validateFields enhancement, support scroll to the first invalid form field
 
-#### options.container: HTMLElement
+#### `options.container: HTMLElement`
 
 Defaults to first scrollable container of form field(until document).
 
