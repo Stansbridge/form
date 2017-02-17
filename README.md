@@ -114,7 +114,7 @@ export createForm()(Form);
 	- `formOption` (Optional)
 
 		Option Key | Signature | Description
-		-|-|-
+		---|---|---
 		`validateMessages `| `Object` | Preset messages of [async-validator](https://github.com/yiminghe/async-validator)
 		`mapProps` | `Function(props): Object` | Get new props transfered to WrappedComponent. Defaults to props=>props.
 		`onFieldsChange` | `Function(props, changedFields)` | Called when field changed, you can dispatch fields to redux store.
@@ -133,7 +133,7 @@ Will create props which can be set on any Component which supports both the `val
 	- `option: Object` (Optional):
 	
 		Option Key | Signature | Description
-		-|-|-
+		---|---|---
 		`exclusive` | `Boolean` | Whether to set the value exclusively. Commonly used with mutually exclusive inputs such as `<input type="radio" />`.
 		`valuePropName` | `String` | Prop name of component's value field, eg: checkbox should be set to `checked`.
 		`getValueFromEvent` | `Function` | Specify how to get value from the arguments to `onChange`. Commonly an event object.
